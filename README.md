@@ -80,9 +80,9 @@ response: We understand ReviewPop is still showing a $29 charge on your Northfor
 
 Verify: Maria's returned `Route=order` versus CSV `expected_route=orders` → literal comparison FAIL; category comparison PASS when `orders` is mapped to `order`. This is a naming difference, not evidence of a classification disagreement. Carla's `billings` similarly corresponds to CSV `billing`. Labels are compared only after inference, and are not assumed to be ground truth.
 
-No Maria re-run was performed after this first recorded run. Re-run output or mismatch investigation, if needed: [YOUR RE-RUN OUTPUT / NOT NEEDED].
+No re-run was needed because the difference is only in the label names, not the classification. No Maria re-run was performed after the first recorded run.
 
-My reasoning about the `order` versus `orders` mismatch and whether Maria's expected label is correct: [YOUR REASONING].
+My assessment: `order` and `orders` represent the same category, so I consider Maria's classification consistent with her expected route. The prompt's output labels should be aligned with the dataset names (`billing` and `orders`) to allow direct comparisons. That naming update has not yet been applied to the code.
 
 ### Key triage prompt
 
@@ -96,16 +96,16 @@ It also instructs the model to return `error` for unrelated data and a JSON obje
 
 ### Free model and personal review
 
-Model used in both recorded runs: `baidu/ernie-5.5-flash-preview:free`, configured in the local, ignored `.env` file. This was the assistant-selected initial free model; any personal choice or endorsement remains for the reviewer to record.
+Model used in both recorded runs: `baidu/ernie-5.5-flash-preview:free`, configured in the local, ignored `.env` file. The assistant initially selected this free model, and I chose to keep it after reviewing the results.
 
-The free model I chose and why: [CONFIRM THE MODEL ABOVE OR NAME YOUR CHOICE; EXPLAIN YOUR REASON].
+Why I am keeping this model: it classified the tested tickets correctly, so it is sufficient for the current triage task. I do not see a need to pay for a more expensive model when the free model does the job.
 
 One phrase in Maria's message that could pull the model toward the billing agent is: “buyers in portugal got charged international??” It refers to a charge, while the overall ticket concerns incorrect shipping rates across orders.
 
 The current prompt distinguishes shipping/order issues from billing issues and tells the model to choose the main issue. No Maria-specific prompt change was made after the recorded run.
 
-How I changed the prompt to handle that ambiguity: [YOUR EXACT BEFORE/AFTER CHANGE AND REASON, OR SAY NO CHANGE WAS NEEDED].
+I did not change the prompt to handle this ambiguity. The current prompt lists subcategories that guide the choice of the main category and explains how to handle tickets with mixed issues. I considered that guidance sufficient for Maria's ticket.
 
-What I checked or changed in the code: [YOUR CHECKS OR CHANGES].
+What I checked in the code: I have not personally reviewed every line, but I confirmed that only `message_body` reaches the model, that `expected_route` is excluded, and that invalid inputs return an error.
 
 Observed limitation: the model's `response` sometimes sounds like a promise to resolve the ticket rather than a classification reason. These runs only classified tickets; no refunds, configuration changes, or other merchant actions occurred.
